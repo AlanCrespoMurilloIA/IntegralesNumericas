@@ -22,7 +22,7 @@ char Pila ::top()
 {
 	return heap->caracter;
 }
-int Pila::tama?Pila()
+int Pila::tamanoPila()
 {
 	Nodo* aux = heap;
 	int cont = 0;
