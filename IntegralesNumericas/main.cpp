@@ -12,6 +12,7 @@ struct Integral
 	float* areas = nullptr;
 };
 //HOLA
+//Como estas
 void insertarFuncion(Integral integral)
 {
 	std::string funcion;
