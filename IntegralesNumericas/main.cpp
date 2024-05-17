@@ -11,6 +11,7 @@ struct Integral
 	Pila funcion;
 	float* areas = nullptr;
 };
+//HOLA
 void insertarFuncion(Integral integral)
 {
 	std::string funcion;
