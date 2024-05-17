@@ -1,5 +1,7 @@
 #include "Pila.h"
 
+
+//hola
 void Pila::push(char caracter)
 {
 	Nodo* nodo = new Nodo;
@@ -20,7 +22,7 @@ char Pila ::top()
 {
 	return heap->caracter;
 }
-int Pila::tamañoPila()
+int Pila::tama?Pila()
 {
 	Nodo* aux = heap;
 	int cont = 0;
