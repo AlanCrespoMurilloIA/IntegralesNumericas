@@ -63,3 +63,9 @@ int calcularIntervalo(int b, int a, int numIntervalos)
 {
 	return division(a - b, numIntervalos);
 }
+/*Evalua funcion. FALTA PONER FUNCION*/
+double evaluarFuncion(int punto)
+{
+	int solucion;
+	return solucion;
+}
