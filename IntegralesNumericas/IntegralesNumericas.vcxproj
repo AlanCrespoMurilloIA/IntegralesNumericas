@@ -20,7 +20,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Nodo.h" />
+    <ClInclude Include="Operaciones.h" />
     <ClInclude Include="Pila.h" />
+    <ClInclude Include="Rectangulo.h" />
     <ClInclude Include="trapecio.h" />
   </ItemGroup>
   <ItemGroup>
