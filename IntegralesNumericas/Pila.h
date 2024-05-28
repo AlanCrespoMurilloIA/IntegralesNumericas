@@ -10,7 +10,7 @@ public:
 		int evaluarPunto(int coordX, int coordY);
 		void push(char caracter);
 		char pop();
-		int tamañoPila();
+		int tamanoPila();
 		char top();
 
 
