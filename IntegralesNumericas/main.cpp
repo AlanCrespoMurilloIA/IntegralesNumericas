@@ -15,6 +15,8 @@ struct Integral
 
 };
 
+
+
 std::string operandos[5] = {"+", "-", "*", "/", "exp"};
 std::string operadores[8] = {"sin", "cos", "tan", "csc", "sec", "cot", "ln", "abs"};
 
