@@ -1,6 +1,5 @@
 
 #include <string> 
-#include <iostream>
 //#include "trapecio.h"
 #include "Pila.h"
 
