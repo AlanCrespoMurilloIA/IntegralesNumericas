@@ -164,7 +164,7 @@ void insertarFuncion(Integral *integral){
     } while(tipo == 0);
 
     std::cout << "Tipo: " << tipo << " | Operacion: " << operacion << std::endl;
-   
+    
     //Tipo 1 -- 0 ramas
     //Tipo 2 -- 2 ramas
     //TIpo 3 -- 1 rama
@@ -195,7 +195,8 @@ void insertarFuncion(Integral *integral){
     
     integral->funcion->imprimirRama(integral->funcion->getTronco());
 }
-/*Método para probar la evaluación de un punto*/
+
+/*Metodo para probar la evaluacion de un punto*/
 void evaluarPunto(Integral *integral, int punto)
 {
     int nivelActual=integral->listahojasCoeficientes.nivelMasGrande();
@@ -209,7 +210,7 @@ void evaluarPunto(Integral *integral, int punto)
         integral->listahojas.remove(aux);
         if (aux->termino != "x")
         {
-            std::cout << "ERROR... evaluarPunto(), se encontró un nodo no hoja en listaHojas" << std::endl;
+            std::cout << "ERROR... evaluarPunto(), se encontro un nodo no hoja en listaHojas" << std::endl;
             return;
         }
         aux->valAux = punto;
@@ -241,18 +242,19 @@ void evaluarPunto(Integral *integral, int punto)
 int main(){
     Integral integral;
 	int opc;
-	do{
+	/*do{
         do{
             std::cout << "----------------------------------" << std::endl;
             std::cout << "|                                |" << std::endl;
             std::cout << "|      Integrales Numericas      |" << std::endl;
             std::cout << "|                                |" << std::endl;
-            std::cout << "|   1.- Ingresar una funcion     |" << std::endl;
-            std::cout << "|   2.- Resolver Trapecio        |" << std::endl;
-            std::cout << "|   3.- Resolver Ronberg         |" << std::endl;
-            std::cout << "|   4.- Resolver Simpson         |" << std::endl;
-            std::cout << "|   5.- Salir                    |" << std::endl;
-            std::cout << "|   6. Evaluar un punto          |" << std::endl;
+            std::cout << "|  1.- Ingresar una funcion      |" << std::endl;
+            std::cout << "|  2.- Evaluar un punto          |" << std::endl;
+            std::cout << "|  3.- Resolver Trapecio         |" << std::endl;
+            std::cout << "|  4.- Resolver Ronberg          |" << std::endl;
+            std::cout << "|  5.- Resolver Simpson          |" << std::endl;
+            std::cout << "|  6.- Salir                     |" << std::endl;
+            std::cout << "|                                |" << std::endl;
             std::cout << "----------------------------------" << std::endl;
             std::cout << "Inserte la opcion deseada: ";
             opc = intChecker();
@@ -264,22 +266,23 @@ int main(){
                 insertarFuncion(&integral);
                 break;
             case 2:
+                double punto;
+                std::cout << "Ingrese un punto" << std::endl;
+                std::cin >> punto;
+                evaluarPunto(&integral,punto);
                 break;
             case 3:
                 break;
             case 4:
                 break;
             case 5:
-                std::cout << "Hasta luego!" << std::endl;
-            case 6:
-            {
-                int punto;
-                std::cout << "Ingrese un punto" << std::endl;
-                std::cin >> punto;
-                evaluarPunto(&integral,punto);
                 break;
-            }
+            case 6:
+                std::cout << "Hasta luego!" << std::endl;
+                break;
         }
-	} while (opc != 5);
+	} while (opc != 5);*/
+    std::cout << transformacion("0", "3", "csc") << std::endl;
+    
 	return 0;
 }

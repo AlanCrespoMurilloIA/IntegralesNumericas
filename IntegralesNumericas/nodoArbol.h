@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <iostream>
 //holaaaa siuuu
 class nodoArbol{
 public:
