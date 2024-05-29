@@ -3,6 +3,7 @@
 #include <sstream>
 #include "Operaciones.h"
 #include "arbol.h"
+#include "ListaHojas.h"
 
 struct Integral
 {
@@ -12,7 +13,7 @@ struct Integral
 	Arbol *funcion;
 	float* areas;
     //Integral() : intervaloA(0), intervaloB(0), cantIntervalos(1), areas(nullptr) {}
-
+    ListaHojas listahojas;
 };
 
 std::string operandos[5] = {"+", "-", "*", "/", "exp"};
@@ -127,6 +128,10 @@ void crearRama(nodoArbol* padre, Integral * integral){
     if (tipo == 1){
         //Creando el nodo padre del arbol
         nodo = integral->funcion->insert(termino, padre, hijos);
+        if (termino == "x")
+        {
+            integral->listahojas.insertNodo(nodo);
+        }
         return;
     }
     //Los operandos pueden tener dos ramas
@@ -173,6 +178,10 @@ void insertarFuncion(Integral *integral){
     if (tipo == 1){
         //Creando el nodo padre del arbol
         integral->funcion = new Arbol(operacion, hijos);
+        if (operacion == "x")
+        {
+            integral->listahojas.insertNodo(integral->funcion->getTronco());
+        }
         return;
     }
     //Los operandos pueden tener dos ramas

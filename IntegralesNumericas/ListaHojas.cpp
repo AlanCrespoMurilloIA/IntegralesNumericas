@@ -13,6 +13,7 @@ void ListaHojas::insertNodo(nodoArbol* nodo)
 	if (heap==nullptr)
 	{
 		heap = nodito;
+		cantNodosHojas++;
 		return;
 	}
 	nodoListaHojas *aux = heap;
@@ -21,6 +22,7 @@ void ListaHojas::insertNodo(nodoArbol* nodo)
 		aux = aux->next;
 	}
 	aux->next = nodito;
+	cantNodosHojas++;
 	return;
 }
 void ListaHojas::remove(nodoArbol* nodo)
@@ -32,6 +34,7 @@ void ListaHojas::remove(nodoArbol* nodo)
 	{
 		heap = heap->next;
 		free(aux);
+		cantNodosHojas--;
 		return;
 	}
 	while (aux->next->nodo != nodo)
@@ -46,6 +49,7 @@ void ListaHojas::remove(nodoArbol* nodo)
 	nodoListaHojas* temp = aux->next;
 	aux->next = aux->next->next;
 	free(temp);
+	cantNodosHojas--;
 	return;
 }
 void ListaHojas::remove(int index)
@@ -57,6 +61,7 @@ void ListaHojas::remove(int index)
 	{
 		heap = heap->next;
 		free(aux);
+		cantNodosHojas--;
 		return;
 	}
 	if (index >= cantNodosHojas)
@@ -68,6 +73,7 @@ void ListaHojas::remove(int index)
 	nodoListaHojas* temp = aux->next;
 	aux->next = aux->next->next;
 	free(temp);
+	cantNodosHojas--;
 	return;
 }
 nodoArbol* ListaHojas::get(int nivel)
