@@ -100,16 +100,6 @@ int categorizadorTerminos(std::string termino){
     return tipo;
 }
 
-int indexHijo(nodoArbol* hijo){
-    nodoArbol* aux = hijo->padre->primogenito;
-    int index = 0;
-    while (aux != hijo)
-    {
-        aux = aux->hermanoMenor;
-    }
-    return index;
-}
-
 void crearRama(nodoArbol* padre, Integral * integral){
     int tipo = 0, hijos = 0;
     std::string termino;
