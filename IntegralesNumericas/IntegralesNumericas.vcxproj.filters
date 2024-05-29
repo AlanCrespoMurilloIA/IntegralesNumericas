@@ -38,13 +38,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Nodo.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Users\alanc_3zmayqj\source\repos\LaberintoGen\LaberintoGen\nodoArbol.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="arbol.cpp">

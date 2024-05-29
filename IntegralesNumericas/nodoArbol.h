@@ -5,7 +5,7 @@
 class nodoArbol{
 public:
     //Aquí creamos la estructura de todos los nodos
-    nodoArbol(std::string, nodoArbol*);
+    nodoArbol(std::string term, nodoArbol* ancestro, int profundidad);
     nodoArbol* padre = nullptr;
     nodoArbol* primogenito = nullptr;
     nodoArbol* hermanoMenor = nullptr;

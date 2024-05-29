@@ -99,9 +99,51 @@ int categorizadorTerminos(std::string termino)
         Error("La funcion insertada no pertenece a los diccionarios");
     return tipo;
 }
-void crearRama(nodoArbol* nodo)
+int indexHijo(nodoArbol* hijo)
 {
-    std::cout << "Ingresa el termino hijo del nodo con el termino" << nodo->termino << std::endl;
+    nodoArbol* aux = hijo->padre->primogenito;
+    int index = 0;
+    while (aux != hijo)
+    {
+        aux = aux->hermanoMenor;
+    }
+    return index;
+}
+
+void crearRama(nodoArbol* padre, Integral * integral)
+{
+    int tipo = 0;
+    std::string termino;
+    do {
+        std::cout << "Ingresa el termino hijo del nodo con el termino" << padre->termino << std::endl;
+        std::cout << "El nodo padre tiene el termino: '" << padre->termino << "' y el nodoActual se encuentrará en el nivel" << padre->nivel + 1 << " :" << std::endl;
+        if (padre!=integral->funcion->getTronco())
+            std::cout <<"Este nodo será el hijo num. "<< indexHijo(padre) << " de su padre"<< std::endl;
+        std::cin >> termino;
+        tipo = categorizadorTerminos(termino);
+    } while (tipo == 0);
+    nodoArbol* nodo=integral->funcion->insert(termino, padre);
+    if (tipo == 1)
+        return;
+    else if (termino == "/")
+    {
+        //La division solo puede tener dos ramas
+        for (int i = 0; i < 2; i++)
+        {
+            crearRama(nodo, integral);
+        }
+    }
+    else
+    {
+        //Todos los demas pueden tener 'n' ramas
+        int cantTerminos;
+        std::cout << "Ingrese la cantidad de terminos en este nivel" << std::endl;
+        std::cin >> cantTerminos;
+        for (int i = 0; i < cantTerminos; i++)
+        {
+            crearRama(nodo, integral);
+        }
+    }
     return;
 }
 void insertarFuncion(Integral *integral){
@@ -129,7 +171,7 @@ void insertarFuncion(Integral *integral){
         //La division solo puede tener dos ramas
         for (int i = 0; i < 2; i++)
         {
-            crearRama(integral->funcion->getTronco());
+            crearRama(integral->funcion->getTronco(), integral);
         }
     }
     else
@@ -139,10 +181,10 @@ void insertarFuncion(Integral *integral){
         std::cin >> cantTerminos;
         for (int i = 0; i < cantTerminos; i++)
         {
-            crearRama(integral->funcion->getTronco());
+            crearRama(integral->funcion->getTronco(), integral);
         }
     }
-    
+    integral->funcion->imprimirRama(integral->funcion->getTronco());
 
 
 

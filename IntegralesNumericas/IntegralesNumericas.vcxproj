@@ -28,10 +28,8 @@
     <ClInclude Include="trapecio.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Users\alanc_3zmayqj\source\repos\LaberintoGen\LaberintoGen\nodoArbol.cpp" />
     <ClCompile Include="arbol.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Nodo.cpp" />
     <ClCompile Include="nodoArbol.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
