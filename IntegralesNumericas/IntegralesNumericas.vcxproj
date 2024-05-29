@@ -29,6 +29,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="arbol.cpp" />
+    <ClCompile Include="ListaHojas.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="nodoArbol.cpp" />
   </ItemGroup>

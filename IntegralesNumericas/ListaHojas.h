@@ -8,4 +8,7 @@ private:
 public:
 	bool isEmpty();
 	void insertNodo(nodoArbol* nodo);
+	void remove(nodoArbol*nodo);
+	void remove(int index);
+	nodoArbol* get(int nivel);
 };

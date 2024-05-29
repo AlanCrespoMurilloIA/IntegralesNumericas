@@ -123,7 +123,7 @@ void crearRama(nodoArbol* padre, Integral * integral){
     //Tipo 1 -- 0 ramas
     //Tipo 2 -- 2 ramas
     //TIpo 3 -- 1 rama
-    nodoArbol* nodo;
+    nodoArbol* nodo=nullptr;
     if (tipo == 1){
         //Creando el nodo padre del arbol
         nodo = integral->funcion->insert(termino, padre, hijos);
