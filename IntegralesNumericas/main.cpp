@@ -81,6 +81,7 @@ bool esOperador(const std::string& op){
             return true;
     return false;
 }
+
 /*Categoriza un termino*/
 int categorizadorTerminos(std::string termino)
 {
@@ -88,7 +89,6 @@ int categorizadorTerminos(std::string termino)
     //Tipo 1 = x o numeros
     //Tipo 2 = operandos (+, -, *, /)
     //TIpo 3 = operadores (sin, cos, etc)
-    //Tipo 4 = exponencial
     if (termino == "x" || termino == "pi" || termino == "e" || esNum(termino))
         tipo = 1;
     if (esOperando(termino))
@@ -112,47 +112,51 @@ int indexHijo(nodoArbol* hijo)
 
 void crearRama(nodoArbol* padre, Integral * integral)
 {
-    int tipo = 0;
+    int tipo = 0, hijos = 0;
     std::string termino;
+    std::cout << "\n----------------------------------" << std::endl;
+    std::cout << "Insertando datos del hijo " << (padre->contHijos + 1) << " de la funcion " << padre->termino << ": " << std::endl;
+    std::cout << "----------------------------------\n" << std::endl;
     do {
-        std::cout << "Ingresa el termino hijo del nodo con el termino" << padre->termino << std::endl;
-        std::cout << "El nodo padre tiene el termino: '" << padre->termino << "' y el nodoActual se encuentrará en el nivel" << padre->nivel + 1 << " :" << std::endl;
-        if (padre!=integral->funcion->getTronco())
-            std::cout <<"Este nodo será el hijo num. "<< indexHijo(padre) << " de su padre"<< std::endl;
+        std::cout << "Ingrese el termino principal dentro de " << padre->termino << ". Se encuentra en el nivel " << (padre->nivel + 1) <<": ";
         std::cin >> termino;
         tipo = categorizadorTerminos(termino);
     } while (tipo == 0);
-    nodoArbol* nodo=integral->funcion->insert(termino, padre);
-    if (tipo == 1)
+    //Tipo 1 -- 0 ramas
+    //Tipo 2 -- 2 ramas
+    //TIpo 3 -- 1 rama
+    nodoArbol* nodo;
+    if (tipo == 1){
+        //Creando el nodo padre del arbol
+        nodo = integral->funcion->insert(termino, padre, hijos);
         return;
-    else if (termino == "/")
-    {
-        //La division solo puede tener dos ramas
-        for (int i = 0; i < 2; i++)
-        {
-            crearRama(nodo, integral);
-        }
     }
-    else
-    {
-        //Todos los demas pueden tener 'n' ramas
-        int cantTerminos;
-        std::cout << "Ingrese la cantidad de terminos en este nivel" << std::endl;
-        std::cin >> cantTerminos;
-        for (int i = 0; i < cantTerminos; i++)
-        {
-            crearRama(nodo, integral);
-        }
+    //Los operandos pueden tener dos ramas
+    else if (tipo == 2){
+        //Creando el nodo padre del armol
+        hijos = 2;
+        nodo = integral->funcion->insert(termino, padre, hijos);
     }
+    else if (tipo == 3){
+        //Creando el nodo padre del armol
+        hijos = 1;
+        nodo = integral->funcion->insert(termino, padre, hijos);
+    }
+    for(int i = 0; i < hijos; i++)
+        crearRama(nodo, integral);
     return;
 }
 void insertarFuncion(Integral *integral){
+    std::cout << "----------------------------------" << std::endl;
+    std::cout << "|                                |" << std::endl;
+    std::cout << "|     Insertando la funcion      |" << std::endl;
+    std::cout << "|                                |" << std::endl;
+    std::cout << "----------------------------------" << std::endl;
     std::string operacion;
-    int tipo = 0,cantTerminos=0;
+    int tipo = 0, hijos = 0;
         //Tipo 1 = x o numeros
         //Tipo 2 = operandos (+, -, *, /)
         //TIpo 3 = operadores (sin, cos, etc)
-        //Tipo 4 = exponencial
 
     do{
         std::cout << "Inserte la operacion principal de la funcion: ";
@@ -161,39 +165,35 @@ void insertarFuncion(Integral *integral){
     } while(tipo == 0);
 
     std::cout << "Tipo: " << tipo << " | Operacion: " << operacion << std::endl;
-    //creamos el objeto Arbol dentro de la estructura Integral
-    integral->funcion = new Arbol(operacion);
-    //Si se inserto un termino tipo 1, no se puede crear más ramas
-    if (tipo == 1)
+   
+    //Tipo 1 -- 0 ramas
+    //Tipo 2 -- 2 ramas
+    //TIpo 3 -- 1 rama
+    
+    //Si se inserto un termino tipo 1, no se puede crear ramas
+    if (tipo == 1){
+        //Creando el nodo padre del arbol
+        integral->funcion = new Arbol(operacion, hijos);
         return;
-    else if (operacion == "/")
-    {
-        //La division solo puede tener dos ramas
-        for (int i = 0; i < 2; i++)
-        {
-            crearRama(integral->funcion->getTronco(), integral);
-        }
     }
-    else
-    {
-        //Todos los demas pueden tener 'n' ramas
-        std::cout << "Ingrese la cantidad de terminos en este nivel" << std::endl;
-        std::cin >> cantTerminos;
-        for (int i = 0; i < cantTerminos; i++)
-        {
-            crearRama(integral->funcion->getTronco(), integral);
-        }
+    //Los operandos pueden tener dos ramas
+    else if (tipo == 2){
+        //Creando el nodo padre del arbol
+        hijos = 2;
+        integral->funcion = new Arbol(operacion, hijos);
     }
+    else if (tipo == 3){
+        //Creando el nodo padre del arbol
+        hijos = 1;
+        integral->funcion = new Arbol(operacion, hijos);
+    }
+    for(int i = 0; i < hijos; i++)
+        crearRama(integral->funcion->getTronco(), integral);
+    
     integral->funcion->imprimirRama(integral->funcion->getTronco());
-
-
-
-
 }
 
-
-int main()
-{
+int main(){
     Integral integral;
 	int opc;
 	do{
@@ -212,7 +212,7 @@ int main()
             std::cout << "Inserte la opcion deseada: ";
             opc = intChecker();
             if(opc < 1 || opc > 5)
-                Error("Esa operaci—n no existe");
+                Error("Esa opcion no esta disponible");
         } while(opc < 1 || opc > 5);
         switch (opc){
             case 1:

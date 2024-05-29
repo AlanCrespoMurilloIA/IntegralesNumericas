@@ -1,8 +1,8 @@
 #include "nodoArbol.h"
 
-nodoArbol::nodoArbol(std::string term, nodoArbol* ancestro,int profundidad){
+nodoArbol::nodoArbol(std::string term, nodoArbol* ancestro, int profundidad, int hijos){
     padre = ancestro;
-    //valAux = valor;
     termino = term;
     nivel = profundidad;
+    numHijos = hijos;
 }

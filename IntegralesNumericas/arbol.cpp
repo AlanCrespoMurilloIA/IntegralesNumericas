@@ -1,34 +1,31 @@
 #include "arbol.h"
 
-nodoArbol* Arbol::insert(std::string termino, nodoArbol * nodoPadre){
-    nodoArbol* nodo = new nodoArbol(termino, nodoPadre, nodoPadre->nivel+1);
-    if (tronco == nullptr) //nunca deberia cumplirse esta condicion por el cosntructor de Arbol
-    {
-        tronco = nodo;
-        return nodo;
-    }
-    //si no tiene hijos, apunta atu nuevo hijo
-    if (nodoPadre->primogenito == nullptr)
-    {
-        nodoPadre->primogenito = nodo;
-        return nodo;
-    }
-
-    nodoArbol *aux = nodoPadre->primogenito;
-    while (aux->hermanoMenor != nullptr)
-    {
-        aux = aux->hermanoMenor;
-    }
-    aux->hermanoMenor = nodo;
-
-    return nodo;
-}
-Arbol::Arbol(std::string operando)
-{
-    nodoArbol* nodo = new nodoArbol(operando, nullptr, 0);
+Arbol::Arbol(std::string operando, int numHijos){
+    nodoArbol* nodo = new nodoArbol(operando, nullptr, 0, numHijos);
     tronco = nodo;
     return;
 }
+
+nodoArbol* Arbol::insert(std::string termino, nodoArbol * padre, int hijos){
+    nodoArbol* nodo = new nodoArbol(termino, padre, (padre->nivel + 1), hijos);
+    if (tronco == nullptr){
+        tronco = nodo;
+        return nodo;
+    }
+    //Si no tiene hijos, apunta a su nuevo hijos
+    if(padre->primogenito == nullptr){
+        padre->primogenito = nodo;
+        padre->contHijos++;
+        return nodo;
+    }
+    nodoArbol* aux = padre->primogenito;
+    if(padre->contHijos < padre->numHijos){
+        aux->hermanoMenor = nodo;
+        padre->contHijos++;
+    }
+    return nodo;
+}
+
 nodoArbol* Arbol::getTronco()
 {
     return tronco;
@@ -47,8 +44,7 @@ void Arbol::imprimirRama(nodoArbol*nodo)
         std::cout<<" y hermano menor " << nodo->hermanoMenor->termino << std::endl;;
     std::cout << "_______________________________________________" << std::endl;
     nodoArbol* aux = nodo->primogenito;
-    while (aux != nullptr)
-    {
+    while (aux != nullptr){
         imprimirRama(aux);
         aux = aux->hermanoMenor;
     }

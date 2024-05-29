@@ -8,8 +8,9 @@ private:
     nodoArbol* tronco = nullptr;
     
 public:
-    nodoArbol* insert(std::string, nodoArbol*);
-    Arbol(std::string operando);
+    Arbol(std::string, int);
+    
+    nodoArbol* insert(std::string, nodoArbol*, int);
     nodoArbol* getTronco();
     void imprimirRama(nodoArbol*nodo);
 
