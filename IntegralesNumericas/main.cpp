@@ -1,7 +1,7 @@
 
-#include <string> 
+#include <string>
 //#include "trapecio.h"
-#include "Pila.h"
+#include "Operaciones.h"
 
 struct Integral
 {

@@ -1,6 +1,5 @@
 #pragma once
 #include "Operaciones.h"
-#include <iostream>
 
 /*Calcula la altura. FALTA PONER FUNCIÓN*/
 double calcularAltura(int punto)
