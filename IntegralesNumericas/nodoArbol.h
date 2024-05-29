@@ -14,4 +14,3 @@ public:
     std::string termino;
 };
 
-//prueba de paralelismo
