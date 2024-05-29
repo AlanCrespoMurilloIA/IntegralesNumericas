@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ListaNodos.h" />
     <ClInclude Include="Nodo.h" />
     <ClInclude Include="nodosLista.h" />
     <ClInclude Include="Operaciones.h" />
@@ -26,6 +27,7 @@
     <ClInclude Include="trapecio.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ListaNodos.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Nodo.cpp" />
     <ClCompile Include="nodosLista.cpp" />

@@ -30,6 +30,9 @@
     <ClInclude Include="nodosLista.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="ListaNodos.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Nodo.cpp">
@@ -39,6 +42,9 @@
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="nodosLista.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="ListaNodos.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
