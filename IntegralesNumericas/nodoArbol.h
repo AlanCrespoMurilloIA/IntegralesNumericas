@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-//holaaaa noouuuuu
+
 class nodoArbol{
 public:
     //Aquí creamos la estructura de todos los nodos
@@ -13,3 +13,5 @@ public:
     int nivel;
     std::string termino;
 };
+
+//prueba de paralelismo
