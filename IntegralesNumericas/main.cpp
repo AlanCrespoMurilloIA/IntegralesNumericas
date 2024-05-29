@@ -19,8 +19,8 @@ void insertarFuncion(Integral integral)
 	std::string funcion;
 	std::cout << "Escriba su funcion. Use '()' donde sea necesario:" << std::endl;
 	std::getline(std::cin, funcion);
-	int tamaño = funcion.length();
-	for (int i = 0; i < tamaño; i++)
+	int tamano = funcion.length();
+	for (int i = 0; i < tamano; i++)
 	{
 		return;
 	}
