@@ -1,7 +1,7 @@
 #include "nodoArbol.h"
 
-nodoArbol::nodoArbol(std::string term, double valor, nodoArbol* ancestro){
+nodoArbol::nodoArbol(std::string term, nodoArbol* ancestro){
     padre = ancestro;
-    valAux = valor;
+    //valAux = valor;
     termino = term;
 }

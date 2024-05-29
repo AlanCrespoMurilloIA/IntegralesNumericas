@@ -1,4 +1,4 @@
-
+//#include <iostream>
 #include <string>
 #include <sstream>
 #include "Operaciones.h"
@@ -9,8 +9,10 @@ struct Integral
 	int intervaloA;
 	int intervaloB;
 	int cantIntervalos = 1;
-	Arbol funcion;
-	float* areas = nullptr;
+	Arbol *funcion;
+	float* areas;
+    //Integral() : intervaloA(0), intervaloB(0), cantIntervalos(1), areas(nullptr) {}
+
 };
 
 std::string operandos[4] = {"+", "-", "*", "/"};
@@ -79,34 +81,79 @@ bool esOperador(const std::string& op){
             return true;
     return false;
 }
-
-void insertarFuncion(Integral integral){
-    std::string operacion;
+/*Categoriza un termino*/
+int categorizadorTerminos(std::string termino)
+{
     int tipo = 0;
+    //Tipo 1 = x o numeros
+    //Tipo 2 = operandos (+, -, *, /)
+    //TIpo 3 = operadores (sin, cos, etc)
+    //Tipo 4 = exponencial
+    if (termino == "x" || termino == "pi" || termino == "e" || esNum(termino))
+        tipo = 1;
+    if (esOperando(termino))
+        tipo = 2;
+    if (esOperador(termino))
+        tipo = 3;
+    if (tipo == 0)
+        Error("La funcion insertada no pertenece a los diccionarios");
+    return tipo;
+}
+void crearRama(nodoArbol* nodo)
+{
+    std::cout << "Ingresa el termino hijo del nodo con el termino" << nodo->termino << std::endl;
+    return;
+}
+void insertarFuncion(Integral *integral){
+    std::string operacion;
+    int tipo = 0,cantTerminos=0;
         //Tipo 1 = x o numeros
         //Tipo 2 = operandos (+, -, *, /)
         //TIpo 3 = operadores (sin, cos, etc)
         //Tipo 4 = exponencial
+
     do{
         std::cout << "Inserte la operacion principal de la funcion: ";
         std::cin >> operacion;
-        if(operacion == "x" || operacion == "pi" || operacion == "e" || esNum(operacion))
-            tipo = 1;
-        if(esOperando(operacion))
-            tipo = 2;
-        if(esOperador(operacion))
-            tipo = 3;
-        if(tipo == 0)
-            Error("La funcion insertada no pertenece a los diccionarios");
+        tipo = categorizadorTerminos(operacion);
     } while(tipo == 0);
+
     std::cout << "Tipo: " << tipo << " | Operacion: " << operacion << std::endl;
+    //creamos el objeto Arbol dentro de la estructura Integral
+    integral->funcion = new Arbol(operacion);
+    //Si se inserto un termino tipo 1, no se puede crear más ramas
+    if (tipo == 1)
+        return;
+    else if (operacion == "/")
+    {
+        //La division solo puede tener dos ramas
+        for (int i = 0; i < 2; i++)
+        {
+            crearRama(integral->funcion->getTronco());
+        }
+    }
+    else
+    {
+        //Todos los demas pueden tener 'n' ramas
+        std::cout << "Ingrese la cantidad de terminos en este nivel" << std::endl;
+        std::cin >> cantTerminos;
+        for (int i = 0; i < cantTerminos; i++)
+        {
+            crearRama(integral->funcion->getTronco());
+        }
+    }
     
+
+
+
+
 }
+
 
 int main()
 {
+    Integral integral;
 	int opc;
-	Integral integral;
 	do{
         do{
             std::cout << "----------------------------------" << std::endl;
@@ -127,7 +174,7 @@ int main()
         } while(opc < 1 || opc > 5);
         switch (opc){
             case 1:
-                insertarFuncion(integral);
+                insertarFuncion(&integral);
                 break;
             case 2:
                 break;

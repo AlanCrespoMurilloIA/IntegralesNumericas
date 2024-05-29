@@ -5,10 +5,13 @@
 
 class Arbol {
 private:
-    nodoArbol* padre = NULL;
+    nodoArbol* tronco = nullptr;
     
 public:
-    void insert(std::string, double, nodoArbol*);
+    void insert(std::string, nodoArbol*);
+    Arbol(std::string operando);
+    nodoArbol* getTronco();
+ 
     
 };
 
