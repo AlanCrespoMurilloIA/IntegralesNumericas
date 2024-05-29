@@ -34,14 +34,14 @@ void Arbol::imprimirRama(nodoArbol*nodo)
 {
     std::cout << "Nodo termino: " << nodo->termino << std::endl; 
     if (nodo == tronco)
-        std::cout << "este es el nodo tronco" << std::endl;
+        std::cout << "Este es el nodo tronco" << std::endl;
     else
-        std::cout<<" con padre: " << nodo->padre->termino;
-    std::cout << " nivel: " << nodo->nivel << std::endl; 
+        std::cout<<"Nodo padre: " << nodo->padre->termino << std::endl;
+    std::cout << "Nivel: " << nodo->nivel << std::endl;
     if (nodo->hermanoMenor == nullptr)
-        std::cout << "Sin hermanos mas pequenos" << std::endl;
+        std::cout << "Sin hermanos menores" << std::endl;
     else
-        std::cout<<" y hermano menor " << nodo->hermanoMenor->termino << std::endl;;
+        std::cout<<"Al menos un hermano menor " << nodo->hermanoMenor->termino << std::endl;;
     std::cout << "_______________________________________________" << std::endl;
     nodoArbol* aux = nodo->primogenito;
     while (aux != nullptr){

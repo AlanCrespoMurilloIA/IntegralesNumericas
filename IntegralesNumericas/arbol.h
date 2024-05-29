@@ -13,6 +13,7 @@ public:
     nodoArbol* insert(std::string, nodoArbol*, int);
     nodoArbol* getTronco();
     void imprimirRama(nodoArbol*nodo);
+    
 
  
     

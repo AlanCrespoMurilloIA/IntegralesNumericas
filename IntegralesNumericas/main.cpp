@@ -63,11 +63,11 @@ bool esNum(const std::string& str) {
         return false;
 
     for (char const &ch : str)
-        if (!std::isdigit(ch)) {
-            return false;  //Si algun valor del string es distinto de 1, 2, ..., 9, no es num
+        if (std::isdigit(ch) || ch == '.') {
+            return true;  //solo se aceptan los dijitos 0 - 9 y el punto '.'
                            //Asi tambien evitamos numeros negativos
         }
-    return true;  // El valor es un numero
+    return false;  // El valor no es un numero
 }
 bool esOperando(const std::string& op){
     for(const auto& operando : operandos)
@@ -83,8 +83,7 @@ bool esOperador(const std::string& op){
 }
 
 /*Categoriza un termino*/
-int categorizadorTerminos(std::string termino)
-{
+int categorizadorTerminos(std::string termino){
     int tipo = 0;
     //Tipo 1 = x o numeros
     //Tipo 2 = operandos (+, -, *, /)
@@ -99,8 +98,8 @@ int categorizadorTerminos(std::string termino)
         Error("La funcion insertada no pertenece a los diccionarios");
     return tipo;
 }
-int indexHijo(nodoArbol* hijo)
-{
+
+int indexHijo(nodoArbol* hijo){
     nodoArbol* aux = hijo->padre->primogenito;
     int index = 0;
     while (aux != hijo)
@@ -110,8 +109,7 @@ int indexHijo(nodoArbol* hijo)
     return index;
 }
 
-void crearRama(nodoArbol* padre, Integral * integral)
-{
+void crearRama(nodoArbol* padre, Integral * integral){
     int tipo = 0, hijos = 0;
     std::string termino;
     std::cout << "\n----------------------------------" << std::endl;
@@ -146,6 +144,7 @@ void crearRama(nodoArbol* padre, Integral * integral)
         crearRama(nodo, integral);
     return;
 }
+
 void insertarFuncion(Integral *integral){
     std::cout << "----------------------------------" << std::endl;
     std::cout << "|                                |" << std::endl;
@@ -225,7 +224,7 @@ int main(){
             case 4:
                 break;
             case 5:
-                std::cout << "Hasta luego!";
+                std::cout << "Hasta luego!" << std::endl;
                 break;
         }
 	} while (opc != 5);
