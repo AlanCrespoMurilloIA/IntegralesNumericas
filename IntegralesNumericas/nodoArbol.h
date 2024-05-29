@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-
+//holaaaa siuuu
 class nodoArbol{
 public:
     //Aquí creamos la estructura de todos los nodos
