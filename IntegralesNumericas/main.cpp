@@ -218,9 +218,25 @@ void evaluarPunto(Integral *integral, int punto)
     while (nivelActual >= 0)
     {
         aux = integral->listahojasCoeficientes.get(nivelActual);
-        
+        if (aux == nullptr)
+        {
+            nivelActual--;
+            continue;
+        }
+        //falta obtener val con Operaciones.h
+        int val = aux->valAux+2;
+        if (aux->hermanoMenor == nullptr)
+            integral->listahojasCoeficientes.remove(aux->padre->primogenito);
+        else
+            integral->listahojasCoeficientes.remove(aux->hermanoMenor);
+        //ahora padre tiene un coeficiente por lo que entra en la categoria hojaCoeficientes
+        if (aux->padre != nullptr)
+        {
+            integral->listahojasCoeficientes.insertNodo(aux->padre);
+            break;
+        }
     }
-    
+    std::cout << "La funcion evaluada en el punto es: " << aux->valAux;
 }
 int main(){
     Integral integral;
@@ -240,9 +256,9 @@ int main(){
             std::cout << "----------------------------------" << std::endl;
             std::cout << "Inserte la opcion deseada: ";
             opc = intChecker();
-            if(opc < 1 || opc > 5)
+            if(opc < 1 || opc > 6)
                 Error("Esa opcion no esta disponible");
-        } while(opc < 1 || opc > 5);
+        } while(opc < 1 || opc > 6);
         switch (opc){
             case 1:
                 insertarFuncion(&integral);
