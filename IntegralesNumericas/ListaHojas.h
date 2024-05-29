@@ -12,4 +12,6 @@ public:
 	void remove(nodoArbol*nodo);
 	void remove(int index);
 	nodoArbol* get(int nivel);
+	nodoArbol* get();
+	int nivelMasGrande();
 };

@@ -89,3 +89,23 @@ nodoArbol* ListaHojas::get(int nivel)
 	}
 	return aux->nodo;
 }
+int ListaHojas::nivelMasGrande()
+{
+	if (isEmpty())
+		return -1;
+	nodoListaHojas* aux = heap;
+	int nivel=0;
+	while (aux!=nullptr)
+	{
+		if (aux->nodo->nivel > nivel)
+			nivel = aux->nodo->nivel;
+		aux = aux->next;
+	}
+	return nivel;
+}
+nodoArbol* ListaHojas::get()
+{
+	if (isEmpty())
+		return nullptr;
+	return heap->nodo;
+}

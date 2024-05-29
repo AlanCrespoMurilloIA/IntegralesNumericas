@@ -14,6 +14,7 @@ struct Integral
 	float* areas;
     //Integral() : intervaloA(0), intervaloB(0), cantIntervalos(1), areas(nullptr) {}
     ListaHojas listahojas;
+    ListaHojas listahojasCoeficientes;
 };
 
 std::string operandos[5] = {"+", "-", "*", "/", "exp"};
@@ -122,6 +123,10 @@ void crearRama(nodoArbol* padre, Integral * integral){
         {
             integral->listahojas.insertNodo(nodo);
         }
+        else
+        {
+            integral->listahojasCoeficientes.insertNodo(nodo);
+        }
         return;
     }
     //Los operandos pueden tener dos ramas
@@ -190,7 +195,33 @@ void insertarFuncion(Integral *integral){
     
     integral->funcion->imprimirRama(integral->funcion->getTronco());
 }
-
+/*Método para probar la evaluación de un punto*/
+void evaluarPunto(Integral *integral, int punto)
+{
+    int nivelActual=integral->listahojasCoeficientes.nivelMasGrande();
+    //Este while es para sustituir 'x' con el punto
+    nodoArbol* aux = integral->listahojas.get();
+    while (aux != nullptr)
+    {
+        //Como 'x' va a ser sustituida por un punto, ese nodo ahora tendra un coeficiente
+        //por lo que entra en la categoria de listahojasCoeficientes
+        integral->listahojasCoeficientes.insertNodo(aux);
+        integral->listahojas.remove(aux);
+        if (aux->termino != "x")
+        {
+            std::cout << "ERROR... evaluarPunto(), se encontró un nodo no hoja en listaHojas" << std::endl;
+            return;
+        }
+        aux->valAux = punto;
+        nodoArbol* aux = integral->listahojas.get();
+    }
+    while (nivelActual >= 0)
+    {
+        aux = integral->listahojasCoeficientes.get(nivelActual);
+        
+    }
+    
+}
 int main(){
     Integral integral;
 	int opc;
@@ -205,7 +236,7 @@ int main(){
             std::cout << "|   3.- Resolver Ronberg         |" << std::endl;
             std::cout << "|   4.- Resolver Simpson         |" << std::endl;
             std::cout << "|   5.- Salir                    |" << std::endl;
-            std::cout << "|                                |" << std::endl;
+            std::cout << "|   6. Evaluar un punto          |" << std::endl;
             std::cout << "----------------------------------" << std::endl;
             std::cout << "Inserte la opcion deseada: ";
             opc = intChecker();
@@ -224,7 +255,14 @@ int main(){
                 break;
             case 5:
                 std::cout << "Hasta luego!" << std::endl;
+            case 6:
+            {
+                int punto;
+                std::cout << "Ingrese un punto" << std::endl;
+                std::cin >> punto;
+                evaluarPunto(&integral,punto);
                 break;
+            }
         }
 	} while (opc != 5);
 	return 0;
