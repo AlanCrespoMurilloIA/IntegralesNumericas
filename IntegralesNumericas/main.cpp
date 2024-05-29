@@ -8,7 +8,7 @@ struct Integral
 	int intervaloA;
 	int intervaloB;
 	int cantIntervalos = 1;
-	Pila funcion;
+	//Pila funcion;
 	float* areas = nullptr;
 };
 //HOLA
@@ -30,11 +30,20 @@ int main()
 {
 	int opc;
 	Integral integral;
-	do
-	{
-		std::cout << "SOLVER INTEGRALES NÚMERICAS\nEliga una opción\n1) Ingrese una función\nResolver mediante:";
-		std::cout << "2) Trapecio\n3) Ronberg\n4) Simpson\n5) Salir" << std::endl;
-		std::cin >> opc;
+	do{
+        std::cout << "----------------------------------" << std::endl;
+        std::cout << "|                                |" << std::endl;
+        std::cout << "|      Integrales Numericas      |" << std::endl;
+        std::cout << "|                                |" << std::endl;
+        std::cout << "|   1.- Ingresar una funcion     |" << std::endl;
+        std::cout << "|   2.- Resolver Trapecio        |" << std::endl;
+        std::cout << "|   3.- Resolver Ronberg         |" << std::endl;
+        std::cout << "|   4.- Resolver Simpson         |" << std::endl;
+        std::cout << "|   5.- Salir                    |" << std::endl;
+        std::cout << "|                                |" << std::endl;
+        std::cout << "----------------------------------" << std::endl;
+        std::cout << "Inserte la opcion deseada: ";
+        std::cin >> opc;
 
 		switch (opc)
 		{

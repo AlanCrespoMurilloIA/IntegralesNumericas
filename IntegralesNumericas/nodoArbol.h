@@ -9,7 +9,7 @@ public:
     nodoArbol* padre = NULL;
     nodoArbol* primogenito = NULL;
     nodoArbol* hermanoMenor = NULL;
-    double valAux = null;
+    double valAux = 0;
     int nivel;
     std::string termino;
 };
