@@ -13,6 +13,7 @@ void ListaHojas::insertNodo(nodoArbol* nodo)
 	if (heap==nullptr)
 	{
 		heap = nodito;
+		return;
 	}
 	nodoListaHojas *aux = heap;
 	while (aux->next != nullptr)
@@ -24,6 +25,27 @@ void ListaHojas::insertNodo(nodoArbol* nodo)
 }
 void ListaHojas::remove(nodoArbol* nodo)
 {
+	if (isEmpty())
+		return;
+	nodoListaHojas* aux = heap;
+	if (heap->nodo == nodo)
+	{
+		heap = heap->next;
+		free(aux);
+		return;
+	}
+	while (aux->next->nodo != nodo)
+	{
+		aux = aux->next;
+		if (aux == nullptr)
+		{
+			std::cout << "WARNING... ListaHojas::remove(nodo), nodo ingresado no existe en la lista..." << std::endl;
+			return;
+		}
+	}
+	nodoListaHojas* temp = aux->next;
+	aux->next = aux->next->next;
+	free(temp);
 	return;
 }
 void ListaHojas::remove(int index)
@@ -33,12 +55,19 @@ void ListaHojas::remove(int index)
 	nodoListaHojas* aux = heap;
 	if (index == 0)
 	{
-
+		heap = heap->next;
+		free(aux);
+		return;
 	}
-	for (int i = 0; i < index; i++)
+	if (index >= cantNodosHojas)
+		return;
+	for (int i = 0; i < index-1; i++)
 	{
-
+		aux = aux->next;
 	}
+	nodoListaHojas* temp = aux->next;
+	aux->next = aux->next->next;
+	free(temp);
 	return;
 }
 nodoArbol* ListaHojas::get(int nivel)
@@ -49,6 +78,8 @@ nodoArbol* ListaHojas::get(int nivel)
 	while (aux->nodo->nivel != nivel)
 	{
 		aux = aux->next;
+		if (aux == nullptr)
+			return nullptr;
 	}
 	return aux->nodo;
 }

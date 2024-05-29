@@ -6,6 +6,7 @@ class ListaHojas {
 private:
 	nodoListaHojas* heap=nullptr;
 public:
+	int cantNodosHojas = 0;
 	bool isEmpty();
 	void insertNodo(nodoArbol* nodo);
 	void remove(nodoArbol*nodo);
