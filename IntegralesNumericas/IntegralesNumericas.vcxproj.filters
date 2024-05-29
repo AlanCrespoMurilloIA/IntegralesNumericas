@@ -18,9 +18,6 @@
     <ClInclude Include="trapecio.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
-    <ClInclude Include="Pila.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="Nodo.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
@@ -30,15 +27,18 @@
     <ClInclude Include="Operaciones.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="nodosLista.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Pila.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="Nodo.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="nodosLista.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
