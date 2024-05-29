@@ -21,14 +21,12 @@
   <ItemGroup>
     <ClInclude Include="Nodo.h" />
     <ClInclude Include="Operaciones.h" />
-    <ClInclude Include="Pila.h" />
     <ClInclude Include="Rectangulo.h" />
     <ClInclude Include="trapecio.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Nodo.cpp" />
-    <ClCompile Include="Pila.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
