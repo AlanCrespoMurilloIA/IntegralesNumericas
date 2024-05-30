@@ -40,7 +40,7 @@ void ListaHojas::remove(nodoArbol* nodo)
 	while (aux->next->nodo != nodo)
 	{
 		aux = aux->next;
-		if (aux == nullptr)
+		if (aux->next == nullptr)
 		{
 			std::cout << "WARNING... ListaHojas::remove(nodo), nodo ingresado no existe en la lista..." << std::endl;
 			return;

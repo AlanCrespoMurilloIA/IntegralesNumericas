@@ -197,7 +197,7 @@ void insertarFuncion(Integral *integral){
 }
 
 /*Metodo para probar la evaluacion de un punto*/
-void evaluarPunto(Integral *integral, int punto)
+void evaluarPunto(Integral *integral, double punto)
 {
     int nivelActual=integral->listahojasCoeficientes.nivelMasGrande();
     //Este while es para sustituir 'x' con el punto
@@ -234,21 +234,33 @@ void evaluarPunto(Integral *integral, int punto)
         //int val = transformacion();
         if (aux->hermanoMenor == nullptr)
         {
-            //asigna el valor al aux->valAux
-            if (aux->termino != "x" && aux->termino != "pi" && aux->termino != "e")
-                aux->valAux = std::stod(aux->termino);
-            if (aux->padre->primogenito->termino != "x" && aux->padre->primogenito->termino != "pi" && aux->padre->primogenito->termino != "e")
-                aux->padre->primogenito->valAux=std::stod(aux->padre->primogenito->termino);
+            if (categorizadorTerminos(aux->termino) == 1)
+            {
+                //asigna el valor al aux->valAux
+                if (aux->termino != "x" && aux->termino != "pi" && aux->termino != "e")
+                    aux->valAux = std::stod(aux->termino);
+            }
+            if (categorizadorTerminos(aux->padre->primogenito->termino) == 1)
+            {
+                if (aux->padre->primogenito->termino != "x" && aux->padre->primogenito->termino != "pi" && aux->padre->primogenito->termino != "e")
+                    aux->padre->primogenito->valAux = std::stod(aux->padre->primogenito->termino);
+            }
             //asigna el valor al padre
             aux->padre->valAux = transformacion(aux->padre->primogenito->valAux, aux->valAux, aux->padre->termino);
             integral->listahojasCoeficientes.remove(aux->padre->primogenito);
         }
         else
         {
-            if (aux->termino != "x" && aux->termino != "pi" && aux->termino != "e")
-                aux->valAux = std::stod(aux->termino);
-            if (aux->hermanoMenor->termino != "x" && aux->hermanoMenor->termino != "pi" && aux->hermanoMenor->termino != "e")
-                aux->hermanoMenor->valAux = std::stod(aux->hermanoMenor->termino);
+            if (categorizadorTerminos(aux->termino) == 1)
+            {
+                if (aux->termino != "x" && aux->termino != "pi" && aux->termino != "e")
+                    aux->valAux = std::stod(aux->termino);
+            }
+            if (categorizadorTerminos(aux->hermanoMenor->termino) == 1)
+            {
+                if (aux->hermanoMenor->termino != "x" && aux->hermanoMenor->termino != "pi" && aux->hermanoMenor->termino != "e")
+                    aux->hermanoMenor->valAux = std::stod(aux->hermanoMenor->termino);
+            }
             aux->padre->valAux = transformacion(aux->valAux, aux->hermanoMenor->valAux, aux->padre->termino);
             integral->listahojasCoeficientes.remove(aux->hermanoMenor);
         }
