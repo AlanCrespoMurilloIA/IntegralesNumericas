@@ -417,11 +417,79 @@ void Simpson(Integral *integral){
 
     std::cout << "La integral evaluada desde el punto " << a << " hasta el punto " << b << " da como resultado un total de: " << resultado << std::endl;
 }
-void romberg(Integral * integral)
+double trapecio(Integral * integral, int n, double a, double b)
+{
+    double h, sum = 0;
+    std::vector<double> x(n + 1);
+    h = (b - a) / n;
+    x[0] = a;
+
+    for (int j = 1; j < (n + 1); j++)
+        x[j] = a + (h * j);
+
+    for (int j = 1; j <= (n / 2); j++)
+        sum += f(integral, x[2 * j - 2]) + 4 * f(integral, x[2 * j - 1]) + f(integral, x[2 * j]);
+
+    double resultado = sum * (h / 3);
+
+    std::cout << "La integral evaluada desde el punto " << a << " hasta el punto " << b << " da como resultado un total de: " << resultado << std::endl;
+    return resultado;
+}
+void romberg(Integral* integral)
 {
     std::cout << "----------------------------------" << std::endl;
     std::cout << "|                                |" << std::endl;
     std::cout << "|  Evaluando metodo del Romberg  |" << std::endl;
+    std::cout << "|                                |" << std::endl;
+    std::cout << "----------------------------------" << std::endl << std::endl;
+    std::string val1, val2;
+    double a = 0, b = 0, resultado = 0;
+    int k = 0;
+    do {
+        std::cout << "Inserte el valor inferior del intervalo a estimar: ";
+        std::cin >> val1;
+        if (!esNum(val1) && val1 != "pi" && val1 != "e")
+            Error("Inserte un numero valido");
+    } while (!esNum(val1) && val1 != "pi" && val1 != "e");
+    a = str2dou(val1);
+    do {
+        std::cout << "Inserte el valor superior del intervalo a estimar: ";
+        std::cin >> val2;
+        if (str2dou(val1) >= str2dou(val2))
+            Error("El valor superior debe ser mayor al inferior");
+    } while (a >= str2dou(val2));
+    b = str2dou(val2);
+
+    // Obtener el nœmero de intervalos
+    do {
+        std::cout << "Inserte la 'k' de intervalos: ";
+        k = intChecker();
+        if (k <= 0)
+            Error("'k' debe ser mayor que 0");
+    } while (k <= 0);
+    double* columna = new double[k];
+    for (int i = 0; i < k; i++)
+    {
+        columna[i] = trapecio(integral, std::pow(2,i), a,b);
+        std::cout << "columna 1 fila[" << columna[i] << "]" << std::endl;
+    }
+    for (int ck = 2; ck <= k; ck++)
+    {
+        for (int i = 0; i < k - 1; i++)
+        {
+            columna[i] = ((std::pow(4, ck - 1)) * columna[i + 1] - columna[i]) / (std::pow(4, ck - 1) - 1);
+            std::cout <<"ck="<<ck<< " y fila [" << i << "]= " << columna[i] << std::endl;
+        }
+    }
+    resultado = columna[0];
+    std::cout << "La solucion es: " << resultado << std::endl;
+
+}
+void rectangulo(Integral * integral)
+{
+    std::cout << "----------------------------------" << std::endl;
+    std::cout << "|                                |" << std::endl;
+    std::cout << "| Evaluando metodo del Rectangulo|" << std::endl;
     std::cout << "|                                |" << std::endl;
     std::cout << "----------------------------------" << std::endl << std::endl;
     std::string val1, val2;
@@ -499,16 +567,17 @@ int main(){
             std::cout << "|  1.- Ingresar una funcion      |" << std::endl;
             std::cout << "|  2.- Evaluar un punto          |" << std::endl;
             std::cout << "|  3.- Resolver Trapecio         |" << std::endl;
-            std::cout << "|  4.- Resolver Ronberg          |" << std::endl;
+            std::cout << "|  4.- Resolver Rectangulo       |" << std::endl;
             std::cout << "|  5.- Resolver Simpson          |" << std::endl;
-            std::cout << "|  6.- Salir                     |" << std::endl;
+            std::cout << "|  6.- Resolver Romberg          |" << std::endl;
+            std::cout << "|  7.- Salir                     |" << std::endl;
             std::cout << "|                                |" << std::endl;
             std::cout << "----------------------------------" << std::endl;
             std::cout << "Inserte la opcion deseada: ";
             opc = intChecker();
-            if(opc < 1 || opc > 6)
+            if(opc < 1 || opc > 7)
                 Error("Esa opcion no esta disponible");
-        } while(opc < 1 || opc > 6);
+        } while(opc < 1 || opc > 7);
         std::cout << std::endl;
         switch (opc){
             case 1:
@@ -521,15 +590,18 @@ int main(){
                 trapecio(&integral);
                 break;
             case 4:
-                romberg(&integral);
+                rectangulo(&integral);
                 break;
             case 5:
                 Simpson(&integral);
                 break;
             case 6:
+                romberg(&integral);
+                break;
+            case 7:
                 std::cout << "Hasta luego!" << std::endl;
                 break;
         }
-    } while (opc != 6);
+    } while (opc != 7);
     return 0;
 }
