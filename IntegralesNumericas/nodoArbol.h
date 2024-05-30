@@ -13,5 +13,6 @@ public:
     nodoArbol* hermanoMenor = nullptr;
     double valAux = 0;
     int nivel, numHijos = 0, contHijos = 0;
+    bool checado = false;
     std::string termino;
 };

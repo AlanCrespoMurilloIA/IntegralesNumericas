@@ -120,13 +120,9 @@ void crearRama(nodoArbol* padre, Integral * integral){
         //Creando el nodo padre del arbol
         nodo = integral->funcion->insert(termino, padre, hijos);
         if (termino == "x")
-        {
             integral->listahojas.insertNodo(nodo);
-        }
         else
-        {
             integral->listahojasCoeficientes.insertNodo(nodo);
-        }
         return;
     }
     //Los operandos pueden tener dos ramas
@@ -174,9 +170,9 @@ void insertarFuncion(Integral *integral){
         //Creando el nodo padre del arbol
         integral->funcion = new Arbol(operacion, hijos);
         if (operacion == "x")
-        {
             integral->listahojas.insertNodo(integral->funcion->getTronco());
-        }
+        else
+            integral->listahojasCoeficientes.insertNodo(integral->funcion->getTronco());
         return;
     }
     //Los operandos pueden tener dos ramas
@@ -196,83 +192,86 @@ void insertarFuncion(Integral *integral){
     integral->funcion->imprimirRama(integral->funcion->getTronco());
 }
 
-/*Metodo para probar la evaluacion de un punto*/
-void evaluarPunto(Integral *integral, double punto)
-{
-    int nivelActual=integral->listahojasCoeficientes.nivelMasGrande();
-    //Este while es para sustituir 'x' con el punto
-    nodoArbol* aux = integral->listahojas.get();
-    while (aux != nullptr)
-    {
-        //Como 'x' va a ser sustituida por un punto, ese nodo ahora tendra un coeficiente
-        //por lo que entra en la categoria de listahojasCoeficientes
-        integral->listahojasCoeficientes.insertNodo(aux);
-        integral->listahojas.remove(aux);
-        if (aux->termino != "x")
-        {
-            std::cout << "ERROR... evaluarPunto(), se encontro un nodo no hoja en listaHojas" << std::endl;
-            return;
-        }
-        aux->valAux = punto;
-        aux = integral->listahojas.get();
+double evaluarRama(nodoArbol* nodo){
+    double resultado = 0, val1 = 0, val2 = 0;
+    std::string operacion = nodo->termino;
+    
+    nodoArbol* primogenito = nodo->primogenito;
+    nodoArbol* hermanoMenor = primogenito ? primogenito->hermanoMenor : nullptr;
+    
+    if (primogenito == nullptr)
+        throw std::invalid_argument("El nodo debe tener al menos un primogenito");
+    
+    if (primogenito->primogenito == nullptr && (hermanoMenor == nullptr || hermanoMenor->primogenito == nullptr)){
+        val1 = primogenito->valAux;
+        if (hermanoMenor != nullptr)
+            val2 = hermanoMenor->valAux;
+    } else if (primogenito->primogenito != nullptr && hermanoMenor == nullptr){
+        val1 = evaluarRama(primogenito);
+    } else if (primogenito->primogenito != nullptr && hermanoMenor != nullptr && hermanoMenor->primogenito != nullptr) {
+        val1 = evaluarRama(primogenito);
+        val2 = evaluarRama(hermanoMenor);
+    } else if (primogenito->primogenito != nullptr && hermanoMenor != nullptr && hermanoMenor->primogenito == nullptr) {
+        val1 = evaluarRama(primogenito);
+        val2 = hermanoMenor->valAux;
+    } else if (primogenito->primogenito == nullptr && hermanoMenor != nullptr && hermanoMenor->primogenito != nullptr) {
+        val1 = primogenito->valAux;
+        val2 = evaluarRama(hermanoMenor);
     }
 
-    while (nivelActual >= 0)
-    {
-        aux = integral->listahojasCoeficientes.get(nivelActual);
-        if (aux == nullptr)
-        {
-            nivelActual--;
-            continue;
-        }
-        //esto significa que ya hemos llegado al tronco
-        if (aux->padre == nullptr)
-            break;
-        //falta obtener val con Operaciones.h
-        //int val = aux->valAux+2;
-        //int auxDouble1, auxDouble2;
-        //int val = transformacion();
-        if (aux->hermanoMenor == nullptr)
-        {
-            if (categorizadorTerminos(aux->termino) == 1)
-            {
-                //asigna el valor al aux->valAux
-                if (aux->termino != "x" && aux->termino != "pi" && aux->termino != "e")
-                    aux->valAux = std::stod(aux->termino);
-            }
-            if (categorizadorTerminos(aux->padre->primogenito->termino) == 1)
-            {
-                if (aux->padre->primogenito->termino != "x" && aux->padre->primogenito->termino != "pi" && aux->padre->primogenito->termino != "e")
-                    aux->padre->primogenito->valAux = std::stod(aux->padre->primogenito->termino);
-            }
-            //asigna el valor al padre
-            aux->padre->valAux = transformacion(aux->padre->primogenito->valAux, aux->valAux, aux->padre->termino);
-            integral->listahojasCoeficientes.remove(aux->padre->primogenito);
-        }
-        else
-        {
-            if (categorizadorTerminos(aux->termino) == 1)
-            {
-                if (aux->termino != "x" && aux->termino != "pi" && aux->termino != "e")
-                    aux->valAux = std::stod(aux->termino);
-            }
-            if (categorizadorTerminos(aux->hermanoMenor->termino) == 1)
-            {
-                if (aux->hermanoMenor->termino != "x" && aux->hermanoMenor->termino != "pi" && aux->hermanoMenor->termino != "e")
-                    aux->hermanoMenor->valAux = std::stod(aux->hermanoMenor->termino);
-            }
-            aux->padre->valAux = transformacion(aux->valAux, aux->hermanoMenor->valAux, aux->padre->termino);
-            integral->listahojasCoeficientes.remove(aux->hermanoMenor);
-        }
-        //ahora padre tiene un coeficiente por lo que entra en la categoria hojaCoeficientes
-        if (aux->padre != nullptr)
-        {
-            integral->listahojasCoeficientes.insertNodo(aux->padre);
-        }
-        integral->listahojasCoeficientes.remove(aux);
-    }
-    std::cout << "La funcion evaluada en el punto es: " << aux->valAux;
+    // Esto asume que transformacion(val1, val2, operacion) es una funci—n v‡lida que realiza la operaci—n correcta
+    resultado = transformacion(val1, val2, operacion);
+
+    nodo->valAux = resultado;
+    return resultado;
 }
+
+/*Metodo para probar la evaluacion de un punto*/
+void evaluarPunto(Integral *integral){
+    std::cout << "----------------------------------" << std::endl;
+    std::cout << "|                                |" << std::endl;
+    std::cout << "|  Evaluando en un punto         |" << std::endl;
+    std::cout << "|                                |" << std::endl;
+    std::cout << "----------------------------------" << std::endl;
+    double resultado = 0, coord = 0;
+    std::string punto;
+    bool band = false;
+    do{
+        std::cout << "Deme el punto que desea evaluar: ";
+        std::cin >> punto;
+        if(esNum(punto)){
+            coord = std::stod(punto);
+            band = true;
+        }
+        else if(punto == "pi"){
+            coord = 3.141592653589793238462643383279502884197169399375105820974944592307816406286208;
+            band = true;
+        }
+        else if(punto == "e"){
+            coord = 2.718281828459045235360287471352662497757247093699959574966967627724076630353547;
+            band = true;
+        }
+        if(!band)
+            Error("Inserte un numero valido");
+    }while(!band);
+    std::cout << "f(" << punto << ") = ";
+    
+    //Transformamos cada elemento de la lista de hojas al punto dado
+    nodoListaHojas* aux = integral->listahojas.getHeap();
+    if(aux == nullptr){
+        Error("Aœn no se ha insertado ninguna funci—n");
+        return;
+    }
+    while(aux != nullptr){
+        //Accedemos al nodoArbol al que apunta aux y modificamos el valAux por el valor estudiado
+        aux->nodo->valAux = coord;
+        aux = aux->next;
+    }
+    //Llamamos a la funcion evaluar rama empezando en el nodoPadre
+    resultado = evaluarRama(integral->funcion->getTronco());
+    std::cout << resultado << std::endl;
+}
+
 int main(){
     Integral integral;
 	int opc;
@@ -299,12 +298,10 @@ int main(){
             case 1:
                 insertarFuncion(&integral);
                 break;
-            case 2:
-                double punto;
-                std::cout << "Ingrese un punto" << std::endl;
-                std::cin >> punto;
-                evaluarPunto(&integral,punto);
+            case 2:{
+                evaluarPunto(&integral);
                 break;
+            }
             case 3:
                 break;
             case 4:
@@ -315,7 +312,7 @@ int main(){
                 std::cout << "Hasta luego!" << std::endl;
                 break;
         }
-	} while (opc != 5);
+	} while (opc != 6);
     //std::cout << transformacion("0", "3", "cos") << std::endl;
     
 	return 0;

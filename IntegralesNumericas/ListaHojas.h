@@ -4,7 +4,7 @@
 
 class ListaHojas {
 private:
-	nodoListaHojas* heap=nullptr;
+	nodoListaHojas* heap = nullptr;
 public:
 	int cantNodosHojas = 0;
 	bool isEmpty();
@@ -13,5 +13,6 @@ public:
 	void remove(int index);
 	nodoArbol* get(int nivel);
 	nodoArbol* get();
+    nodoListaHojas* getHeap() {return heap;};
 	int nivelMasGrande();
 };

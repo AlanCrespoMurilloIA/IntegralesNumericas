@@ -1,32 +1,27 @@
 #include "ListaHojas.h"
 
-bool ListaHojas::isEmpty()
-{
+bool ListaHojas::isEmpty(){
 	if (heap == nullptr)
 		return true;
 	return false;
 }
-void ListaHojas::insertNodo(nodoArbol* nodo)
-{
+void ListaHojas::insertNodo(nodoArbol* nodo){
 	nodoListaHojas* nodito = new nodoListaHojas;
 	nodito->nodo = nodo;
-	if (heap==nullptr)
-	{
+	if (heap==nullptr){
 		heap = nodito;
 		cantNodosHojas++;
 		return;
 	}
 	nodoListaHojas *aux = heap;
-	while (aux->next != nullptr)
-	{
+	while (aux->next != nullptr){
 		aux = aux->next;
 	}
 	aux->next = nodito;
 	cantNodosHojas++;
 	return;
 }
-void ListaHojas::remove(nodoArbol* nodo)
-{
+void ListaHojas::remove(nodoArbol* nodo){
 	if (isEmpty())
 		return;
 	nodoListaHojas* aux = heap;
