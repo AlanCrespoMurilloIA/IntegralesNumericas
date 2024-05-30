@@ -304,6 +304,53 @@ double str2dou(std::string str){
     return numero;
 }
 
+void trapecio(Integral *integral){
+    std::cout << "----------------------------------" << std::endl;
+    std::cout << "|                                |" << std::endl;
+    std::cout << "|  Evaluando metodo del trapecio |" << std::endl;
+    std::cout << "|                                |" << std::endl;
+    std::cout << "----------------------------------" << std::endl << std::endl;
+    std::string val1, val2;
+    double a = 0, b = 0, resultado = 0;
+    int n = 0;
+    do{
+        std::cout << "Inserte el valor inferior del intervalo a estimar: ";
+        std::cin >> val1;
+        if(!esNum(val1) && val1 != "pi" && val1 != "e")
+            Error("Inserte un numero valido");
+    }while(!esNum(val1) && val1 != "pi" && val1 != "e");
+    a = str2dou(val1);
+    do {
+        std::cout << "Inserte el valor superior del intervalo a estimar: ";
+        std::cin >> val2;
+        if(str2dou(val1) >= str2dou(val2))
+            Error("El valor superior debe ser mayor al inferior");
+    } while (a >= str2dou(val2));
+    b = str2dou(val2);
+    
+    // Obtener el nœmero de intervalos
+    do{
+        std::cout << "Inserte el numero de intervalos: ";
+        n = intChecker();
+        if (n <= 0)
+            Error("El nœmero de intervalos debe ser mayor que 0");
+    }while(n <= 0);
+
+    double h = (b - a) / n;
+    double suma = 0.0;
+
+    // Paralelizar la suma de los valores intermedios con OpenMP
+    #pragma omp parallel for reduction(+:suma)
+    for (int i = 1; i < n; i++) {
+        double xi = a + i * h;
+        suma += f(integral, xi);
+    }
+
+    // Aplicar la f—rmula del trapecio
+    resultado = (h / 2) * (f(integral, a) + 2 * suma + f(integral, b));
+    std::cout << "La integral evaluada desde el punto " << a << " hasta el punto " << b << " da como resultado un total de: " << resultado << std::endl;
+}
+
 void Simpson(Integral *integral){
     std::cout << "----------------------------------" << std::endl;
     std::cout << "|                                |" << std::endl;
@@ -327,6 +374,7 @@ void Simpson(Integral *integral){
             Error("El valor superior debe ser mayor al inferior");
     } while (a >= str2dou(val2));
     b = str2dou(val2);
+    
     do {
         std::cout << "Inserte el numero de intervalos: ";
         n = intChecker();
@@ -346,7 +394,8 @@ void Simpson(Integral *integral){
         sum += f(integral, x[2*j - 2]) + 4*f(integral, x[2*j - 1]) + f(integral, x[2*j]);
     
     resultado = sum * (h/3);
-    
+
+
     std::cout << "La integral evaluada desde el punto " << a << " hasta el punto " << b << " da como resultado un total de: " << resultado << std::endl;
 }
 
@@ -381,11 +430,12 @@ int main(){
                 evaluarPunto(&integral);
                 break;
             case 3:
+                trapecio(&integral);
                 break;
             case 4:
-                Simpson(&integral);
                 break;
             case 5:
+                Simpson(&integral);
                 break;
             case 6:
                 std::cout << "Hasta luego!" << std::endl;
