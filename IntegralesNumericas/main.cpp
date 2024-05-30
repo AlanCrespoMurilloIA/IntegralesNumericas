@@ -1,6 +1,7 @@
 //#include <iostream>
 #include <string>
 #include <sstream>
+#include <vector>
 #include "Operaciones.h"
 #include "arbol.h"
 #include "ListaHojas.h"
@@ -402,18 +403,17 @@ void Simpson(Integral *integral){
     } while (modulo(n, 2) != 0);
     
     double h, sum = 0;
-    /*double x[n + 1];
-    int j;
-    h = (b - a)/n;
+    std::vector<double> x(n + 1);
+    h = (b - a) / n;
     x[0] = a;
-    for(j = 1; j < (n + 1); j++)
+
+    for (int j = 1; j < (n + 1); j++)
         x[j] = a + (h * j);
-    
-    for(j = 1; j <= (n/2); j++)
-        sum += f(integral, x[2*j - 2]) + 4*f(integral, x[2*j - 1]) + f(integral, x[2*j]);
-    
-    resultado = sum * (h/3);
-    */
+
+    for (int j = 1; j <= (n / 2); j++)
+        sum += f(integral, x[2 * j - 2]) + 4 * f(integral, x[2 * j - 1]) + f(integral, x[2 * j]);
+
+    resultado = sum * (h / 3);
 
     std::cout << "La integral evaluada desde el punto " << a << " hasta el punto " << b << " da como resultado un total de: " << resultado << std::endl;
 }
