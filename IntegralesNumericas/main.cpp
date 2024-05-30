@@ -17,6 +17,9 @@ struct Integral
     ListaHojas listahojasCoeficientes;
 };
 
+double pi = 3.141592653589793238462643383279502884197169399375105820974944592307816406286208;
+double e = 2.718281828459045235360287471352662497757247093699959574966967627724076630353547;
+
 std::string operandos[5] = {"+", "-", "*", "/", "exp"};
 std::string operadores[8] = {"sin", "cos", "tan", "csc", "sec", "cot", "ln", "abs"};
 
@@ -226,6 +229,24 @@ double evaluarRama(nodoArbol* nodo){
     return resultado;
 }
 
+double f(Integral *integral, double coord){
+    double resultado = 0;
+    //Transformamos cada elemento de la lista de hojas al punto dado
+    nodoListaHojas* aux = integral->listahojas.getHeap();
+    if(aux == nullptr){
+        Error("Aun no se ha insertado ninguna funcion");
+        return 0;
+    }
+    while(aux != nullptr){
+        //Accedemos al nodoArbol al que apunta aux y modificamos el valAux por el valor estudiado
+        aux->nodo->valAux = coord;
+        aux = aux->next;
+    }
+    //Llamamos a la funcion evaluar rama empezando en el nodoPadre
+    resultado = evaluarRama(integral->funcion->getTronco());
+    return resultado;
+}
+
 /*Metodo para probar la evaluacion de un punto*/
 void evaluarPunto(Integral *integral){
     std::cout << "----------------------------------" << std::endl;
@@ -244,11 +265,11 @@ void evaluarPunto(Integral *integral){
             band = true;
         }
         else if(punto == "pi"){
-            coord = 3.141592653589793238462643383279502884197169399375105820974944592307816406286208;
+            coord = pi;
             band = true;
         }
         else if(punto == "e"){
-            coord = 2.718281828459045235360287471352662497757247093699959574966967627724076630353547;
+            coord = e;
             band = true;
         }
         if(!band)
@@ -259,7 +280,7 @@ void evaluarPunto(Integral *integral){
     //Transformamos cada elemento de la lista de hojas al punto dado
     nodoListaHojas* aux = integral->listahojas.getHeap();
     if(aux == nullptr){
-        Error("AÏn no se ha insertado ninguna funciÑn");
+        Error("Aun no se ha insertado ninguna funcion");
         return;
     }
     while(aux != nullptr){
@@ -270,6 +291,63 @@ void evaluarPunto(Integral *integral){
     //Llamamos a la funcion evaluar rama empezando en el nodoPadre
     resultado = evaluarRama(integral->funcion->getTronco());
     std::cout << resultado << std::endl;
+}
+
+double str2dou(std::string str){
+    double numero = 0;
+    if(esNum(str))
+        numero = std::stod(str);
+    else if(str == "pi")
+        numero = pi;
+    else if(str == "e")
+        numero = e;
+    return numero;
+}
+
+void Simpson(Integral *integral){
+    std::cout << "----------------------------------" << std::endl;
+    std::cout << "|                                |" << std::endl;
+    std::cout << "|  Evaluando metodo de Simpson   |" << std::endl;
+    std::cout << "|                                |" << std::endl;
+    std::cout << "----------------------------------" << std::endl << std::endl;
+    std::string val1, val2;
+    double a = 0, b = 0, resultado = 0;
+    int n = 0;
+    do{
+        std::cout << "Inserte el valor inferior del intervalo a estimar: ";
+        std::cin >> val1;
+        if(!esNum(val1) && val1 != "pi" && val1 != "e")
+            Error("Inserte un numero valido");
+    }while(!esNum(val1) && val1 != "pi" && val1 != "e");
+    a = str2dou(val1);
+    do {
+        std::cout << "Inserte el valor superior del intervalo a estimar: ";
+        std::cin >> val2;
+        if(str2dou(val1) >= str2dou(val2))
+            Error("El valor superior debe ser mayor al inferior");
+    } while (a >= str2dou(val2));
+    b = str2dou(val2);
+    do {
+        std::cout << "Inserte el numero de intervalos: ";
+        n = intChecker();
+        if(modulo(n, 2) != 0)
+            Error("El intervalo debe ser multiplo de dos");
+    } while (modulo(n, 2) != 0);
+    
+    double h, sum = 0;
+    double x[n + 1];
+    int j;
+    h = (b - a)/n;
+    x[0] = a;
+    for(j = 1; j < (n + 1); j++)
+        x[j] = a + (h * j);
+    
+    for(j = 1; j <= (n/2); j++)
+        sum += f(integral, x[2*j - 2]) + 4*f(integral, x[2*j - 1]) + f(integral, x[2*j]);
+    
+    resultado = sum * (h/3);
+    
+    std::cout << "La integral evaluada desde el punto " << a << " hasta el punto " << b << " da como resultado un total de: " << resultado << std::endl;
 }
 
 int main(){
@@ -294,15 +372,16 @@ int main(){
             if(opc < 1 || opc > 6)
                 Error("Esa opcion no esta disponible");
         } while(opc < 1 || opc > 6);
+        std::cout << std::endl;
         switch (opc){
             case 1:
                 insertarFuncion(&integral);
                 break;
-            case 2:{
+            case 2:
                 evaluarPunto(&integral);
                 break;
-            }
             case 3:
+                Simpson(&integral);
                 break;
             case 4:
                 break;
@@ -313,7 +392,5 @@ int main(){
                 break;
         }
     } while (opc != 6);
-    //std::cout << transformacion("0", "3", "cos") << std::endl;
-    
     return 0;
 }
