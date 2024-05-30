@@ -19,16 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Nodo.h" />
+    <ClInclude Include="arbol.h" />
+    <ClInclude Include="ListaHojas.h" />
+    <ClInclude Include="nodoArbol.h" />
+    <ClInclude Include="nodoListaHojas.h" />
     <ClInclude Include="Operaciones.h" />
-    <ClInclude Include="Pila.h" />
     <ClInclude Include="Rectangulo.h" />
     <ClInclude Include="trapecio.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="arbol.cpp" />
+    <ClCompile Include="ListaHojas.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Nodo.cpp" />
-    <ClCompile Include="Pila.cpp" />
+    <ClCompile Include="nodoArbol.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

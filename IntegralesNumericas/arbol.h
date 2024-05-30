@@ -9,12 +9,7 @@ private:
     
 public:
     Arbol(std::string, int);
-    
     nodoArbol* insert(std::string, nodoArbol*, int);
-    nodoArbol* getTronco();
+    nodoArbol* getTronco() {return tronco;};
     void imprimirRama(nodoArbol*nodo);
-    
-
- 
-    
 };

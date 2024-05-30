@@ -10,9 +10,9 @@ nodoArbol::nodoArbol(std::string term, nodoArbol* ancestro, int profundidad, int
     if(esNum(term))
         valAux = std::stod(term);
     else if(term == "pi")
-        valAux = 3.1415926535897;
+        valAux = 3.141592653589793238462643383279502884197169399375105820974944592307816406286208;
     else if(term == "e")
-        valAux = 2.7182818284590;
+        valAux = 2.718281828459045235360287471352662497757247093699959574966967627724076630353547;
 }
 
 bool nodoArbol::esNum(const std::string& str) {

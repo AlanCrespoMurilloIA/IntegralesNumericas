@@ -26,10 +26,6 @@ nodoArbol* Arbol::insert(std::string termino, nodoArbol * padre, int hijos){
     return nodo;
 }
 
-nodoArbol* Arbol::getTronco()
-{
-    return tronco;
-}
 void Arbol::imprimirRama(nodoArbol*nodo)
 {
     std::cout << "Nodo termino: " << nodo->termino << std::endl;

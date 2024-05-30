@@ -3,6 +3,7 @@
 #include <sstream>
 #include "Operaciones.h"
 #include "arbol.h"
+#include "ListaHojas.h"
 
 struct Integral
 {
@@ -12,10 +13,9 @@ struct Integral
     Arbol *funcion;
     float* areas;
     //Integral() : intervaloA(0), intervaloB(0), cantIntervalos(1), areas(nullptr) {}
-
+    ListaHojas listahojas;
+    ListaHojas listahojasCoeficientes;
 };
-
-
 
 std::string operandos[5] = {"+", "-", "*", "/", "exp"};
 std::string operadores[8] = {"sin", "cos", "tan", "csc", "sec", "cot", "ln", "abs"};
@@ -101,16 +101,6 @@ int categorizadorTerminos(std::string termino){
     return tipo;
 }
 
-int indexHijo(nodoArbol* hijo){
-    nodoArbol* aux = hijo->padre->primogenito;
-    int index = 0;
-    while (aux != hijo)
-    {
-        aux = aux->hermanoMenor;
-    }
-    return index;
-}
-
 void crearRama(nodoArbol* padre, Integral * integral){
     int tipo = 0, hijos = 0;
     std::string termino;
@@ -129,6 +119,10 @@ void crearRama(nodoArbol* padre, Integral * integral){
     if (tipo == 1){
         //Creando el nodo padre del arbol
         nodo = integral->funcion->insert(termino, padre, hijos);
+        if (termino == "x")
+            integral->listahojas.insertNodo(nodo);
+        else
+            integral->listahojasCoeficientes.insertNodo(nodo);
         return;
     }
     //Los operandos pueden tener dos ramas
@@ -166,7 +160,7 @@ void insertarFuncion(Integral *integral){
     } while(tipo == 0);
 
     std::cout << "Tipo: " << tipo << " | Operacion: " << operacion << std::endl;
-   
+    
     //Tipo 1 -- 0 ramas
     //Tipo 2 -- 2 ramas
     //TIpo 3 -- 1 rama
@@ -175,6 +169,10 @@ void insertarFuncion(Integral *integral){
     if (tipo == 1){
         //Creando el nodo padre del arbol
         integral->funcion = new Arbol(operacion, hijos);
+        if (operacion == "x")
+            integral->listahojas.insertNodo(integral->funcion->getTronco());
+        else
+            integral->listahojasCoeficientes.insertNodo(integral->funcion->getTronco());
         return;
     }
     //Los operandos pueden tener dos ramas
@@ -194,6 +192,86 @@ void insertarFuncion(Integral *integral){
     integral->funcion->imprimirRama(integral->funcion->getTronco());
 }
 
+double evaluarRama(nodoArbol* nodo){
+    double resultado = 0, val1 = 0, val2 = 0;
+    std::string operacion = nodo->termino;
+    
+    nodoArbol* primogenito = nodo->primogenito;
+    nodoArbol* hermanoMenor = primogenito ? primogenito->hermanoMenor : nullptr;
+    
+    if (primogenito == nullptr)
+        throw std::invalid_argument("El nodo debe tener al menos un primogenito");
+    
+    if (primogenito->primogenito == nullptr && (hermanoMenor == nullptr || hermanoMenor->primogenito == nullptr)){
+        val1 = primogenito->valAux;
+        if (hermanoMenor != nullptr)
+            val2 = hermanoMenor->valAux;
+    } else if (primogenito->primogenito != nullptr && hermanoMenor == nullptr){
+        val1 = evaluarRama(primogenito);
+    } else if (primogenito->primogenito != nullptr && hermanoMenor != nullptr && hermanoMenor->primogenito != nullptr) {
+        val1 = evaluarRama(primogenito);
+        val2 = evaluarRama(hermanoMenor);
+    } else if (primogenito->primogenito != nullptr && hermanoMenor != nullptr && hermanoMenor->primogenito == nullptr) {
+        val1 = evaluarRama(primogenito);
+        val2 = hermanoMenor->valAux;
+    } else if (primogenito->primogenito == nullptr && hermanoMenor != nullptr && hermanoMenor->primogenito != nullptr) {
+        val1 = primogenito->valAux;
+        val2 = evaluarRama(hermanoMenor);
+    }
+
+    // Esto asume que transformacion(val1, val2, operacion) es una funcion valida que realiza la operacion correcta
+    resultado = transformacion(val1, val2, operacion);
+
+    nodo->valAux = resultado;
+    return resultado;
+}
+
+/*Metodo para probar la evaluacion de un punto*/
+void evaluarPunto(Integral *integral){
+    std::cout << "----------------------------------" << std::endl;
+    std::cout << "|                                |" << std::endl;
+    std::cout << "|  Evaluando en un punto         |" << std::endl;
+    std::cout << "|                                |" << std::endl;
+    std::cout << "----------------------------------" << std::endl;
+    double resultado = 0, coord = 0;
+    std::string punto;
+    bool band = false;
+    do{
+        std::cout << "Deme el punto que desea evaluar: ";
+        std::cin >> punto;
+        if(esNum(punto)){
+            coord = std::stod(punto);
+            band = true;
+        }
+        else if(punto == "pi"){
+            coord = 3.141592653589793238462643383279502884197169399375105820974944592307816406286208;
+            band = true;
+        }
+        else if(punto == "e"){
+            coord = 2.718281828459045235360287471352662497757247093699959574966967627724076630353547;
+            band = true;
+        }
+        if(!band)
+            Error("Inserte un numero valido");
+    }while(!band);
+    std::cout << "f(" << punto << ") = ";
+    
+    //Transformamos cada elemento de la lista de hojas al punto dado
+    nodoListaHojas* aux = integral->listahojas.getHeap();
+    if(aux == nullptr){
+        Error("AÏn no se ha insertado ninguna funciÑn");
+        return;
+    }
+    while(aux != nullptr){
+        //Accedemos al nodoArbol al que apunta aux y modificamos el valAux por el valor estudiado
+        aux->nodo->valAux = coord;
+        aux = aux->next;
+    }
+    //Llamamos a la funcion evaluar rama empezando en el nodoPadre
+    resultado = evaluarRama(integral->funcion->getTronco());
+    std::cout << resultado << std::endl;
+}
+
 int main(){
     Integral integral;
     int opc;
@@ -203,32 +281,39 @@ int main(){
             std::cout << "|                                |" << std::endl;
             std::cout << "|      Integrales Numericas      |" << std::endl;
             std::cout << "|                                |" << std::endl;
-            std::cout << "|   1.- Ingresar una funcion     |" << std::endl;
-            std::cout << "|   2.- Resolver Trapecio        |" << std::endl;
-            std::cout << "|   3.- Resolver Ronberg         |" << std::endl;
-            std::cout << "|   4.- Resolver Simpson         |" << std::endl;
-            std::cout << "|   5.- Salir                    |" << std::endl;
+            std::cout << "|  1.- Ingresar una funcion      |" << std::endl;
+            std::cout << "|  2.- Evaluar un punto          |" << std::endl;
+            std::cout << "|  3.- Resolver Trapecio         |" << std::endl;
+            std::cout << "|  4.- Resolver Ronberg          |" << std::endl;
+            std::cout << "|  5.- Resolver Simpson          |" << std::endl;
+            std::cout << "|  6.- Salir                     |" << std::endl;
             std::cout << "|                                |" << std::endl;
             std::cout << "----------------------------------" << std::endl;
             std::cout << "Inserte la opcion deseada: ";
             opc = intChecker();
-            if(opc < 1 || opc > 5)
+            if(opc < 1 || opc > 6)
                 Error("Esa opcion no esta disponible");
-        } while(opc < 1 || opc > 5);
+        } while(opc < 1 || opc > 6);
         switch (opc){
             case 1:
                 insertarFuncion(&integral);
                 break;
-            case 2:
+            case 2:{
+                evaluarPunto(&integral);
                 break;
+            }
             case 3:
                 break;
             case 4:
                 break;
             case 5:
+                break;
+            case 6:
                 std::cout << "Hasta luego!" << std::endl;
                 break;
         }
-    } while (opc != 5);
+    } while (opc != 6);
+    //std::cout << transformacion("0", "3", "cos") << std::endl;
+    
     return 0;
 }
