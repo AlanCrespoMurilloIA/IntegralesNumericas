@@ -214,8 +214,9 @@ void evaluarPunto(Integral *integral, int punto)
             return;
         }
         aux->valAux = punto;
-        nodoArbol* aux = integral->listahojas.get();
+        aux = integral->listahojas.get();
     }
+
     while (nivelActual >= 0)
     {
         aux = integral->listahojasCoeficientes.get(nivelActual);
@@ -224,25 +225,46 @@ void evaluarPunto(Integral *integral, int punto)
             nivelActual--;
             continue;
         }
+        //esto significa que ya hemos llegado al tronco
+        if (aux->padre == nullptr)
+            break;
         //falta obtener val con Operaciones.h
-        int val = aux->valAux+2;
+        //int val = aux->valAux+2;
+        //int auxDouble1, auxDouble2;
+        //int val = transformacion();
         if (aux->hermanoMenor == nullptr)
+        {
+            //asigna el valor al aux->valAux
+            if (aux->termino != "x" && aux->termino != "pi" && aux->termino != "e")
+                aux->valAux = std::stod(aux->termino);
+            if (aux->padre->primogenito->termino != "x" && aux->padre->primogenito->termino != "pi" && aux->padre->primogenito->termino != "e")
+                aux->padre->primogenito->valAux=std::stod(aux->padre->primogenito->termino);
+            //asigna el valor al padre
+            aux->padre->valAux = transformacion(aux->padre->primogenito->valAux, aux->valAux, aux->padre->termino);
             integral->listahojasCoeficientes.remove(aux->padre->primogenito);
+        }
         else
+        {
+            if (aux->termino != "x" && aux->termino != "pi" && aux->termino != "e")
+                aux->valAux = std::stod(aux->termino);
+            if (aux->hermanoMenor->termino != "x" && aux->hermanoMenor->termino != "pi" && aux->hermanoMenor->termino != "e")
+                aux->hermanoMenor->valAux = std::stod(aux->hermanoMenor->termino);
+            aux->padre->valAux = transformacion(aux->valAux, aux->hermanoMenor->valAux, aux->padre->termino);
             integral->listahojasCoeficientes.remove(aux->hermanoMenor);
+        }
         //ahora padre tiene un coeficiente por lo que entra en la categoria hojaCoeficientes
         if (aux->padre != nullptr)
         {
             integral->listahojasCoeficientes.insertNodo(aux->padre);
-            break;
         }
+        integral->listahojasCoeficientes.remove(aux);
     }
     std::cout << "La funcion evaluada en el punto es: " << aux->valAux;
 }
 int main(){
     Integral integral;
 	int opc;
-	/*do{
+	do{
         do{
             std::cout << "----------------------------------" << std::endl;
             std::cout << "|                                |" << std::endl;
@@ -281,8 +303,8 @@ int main(){
                 std::cout << "Hasta luego!" << std::endl;
                 break;
         }
-	} while (opc != 5);*/
-    std::cout << transformacion("0", "3", "csc") << std::endl;
+	} while (opc != 5);
+    //std::cout << transformacion("0", "3", "cos") << std::endl;
     
 	return 0;
 }
