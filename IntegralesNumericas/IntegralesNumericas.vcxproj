@@ -24,8 +24,6 @@
     <ClInclude Include="nodoArbol.h" />
     <ClInclude Include="nodoListaHojas.h" />
     <ClInclude Include="Operaciones.h" />
-    <ClInclude Include="Rectangulo.h" />
-    <ClInclude Include="trapecio.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="arbol.cpp" />
