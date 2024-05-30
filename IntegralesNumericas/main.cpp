@@ -381,9 +381,9 @@ int main(){
                 evaluarPunto(&integral);
                 break;
             case 3:
-                Simpson(&integral);
                 break;
             case 4:
+                Simpson(&integral);
                 break;
             case 5:
                 break;
