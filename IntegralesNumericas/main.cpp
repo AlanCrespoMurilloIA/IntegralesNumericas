@@ -475,7 +475,7 @@ void romberg(Integral* integral)
     }
     for (int ck = 2; ck <= k; ck++)
     {
-        for (int i = 0; i < k - 1; i++)
+        for (int i = 0; i < k -ck+1; i++)
         {
             columna[i] = ((std::pow(4, ck - 1)) * columna[i + 1] - columna[i]) / (std::pow(4, ck - 1) - 1);
             std::cout <<"ck="<<ck<< " y fila [" << i << "]= " << columna[i] << std::endl;
