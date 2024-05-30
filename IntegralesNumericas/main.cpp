@@ -292,6 +292,25 @@ void evaluarPunto(Integral *integral){
     resultado = evaluarRama(integral->funcion->getTronco());
     std::cout << resultado << std::endl;
 }
+double evaluarPunto(Integral* integral, double punto) {
+    std::cout << "f(" << punto << ") = ";
+    double resultado = 0, coord = punto;
+    //Transformamos cada elemento de la lista de hojas al punto dado
+    nodoListaHojas* aux = integral->listahojas.getHeap();
+    if (aux == nullptr) {
+        Error("Aun no se ha insertado ninguna funcion");
+        return 0;
+    }
+    while (aux != nullptr) {
+        //Accedemos al nodoArbol al que apunta aux y modificamos el valAux por el valor estudiado
+        aux->nodo->valAux = coord;
+        aux = aux->next;
+    }
+    //Llamamos a la funcion evaluar rama empezando en el nodoPadre
+    resultado = evaluarRama(integral->funcion->getTronco());
+    std::cout << resultado << std::endl;
+    return resultado;
+}
 
 double str2dou(std::string str){
     double numero = 0;
@@ -383,7 +402,7 @@ void Simpson(Integral *integral){
     } while (modulo(n, 2) != 0);
     
     double h, sum = 0;
-    double x[n + 1];
+    /*double x[n + 1];
     int j;
     h = (b - a)/n;
     x[0] = a;
@@ -394,9 +413,78 @@ void Simpson(Integral *integral){
         sum += f(integral, x[2*j - 2]) + 4*f(integral, x[2*j - 1]) + f(integral, x[2*j]);
     
     resultado = sum * (h/3);
-
+    */
 
     std::cout << "La integral evaluada desde el punto " << a << " hasta el punto " << b << " da como resultado un total de: " << resultado << std::endl;
+}
+void romberg(Integral * integral)
+{
+    std::cout << "----------------------------------" << std::endl;
+    std::cout << "|                                |" << std::endl;
+    std::cout << "|  Evaluando metodo del Romberg  |" << std::endl;
+    std::cout << "|                                |" << std::endl;
+    std::cout << "----------------------------------" << std::endl << std::endl;
+    std::string val1, val2;
+    double a = 0, b = 0, resultado = 0;
+    int n = 0;
+    do {
+        std::cout << "Inserte el valor inferior del intervalo a estimar: ";
+        std::cin >> val1;
+        if (!esNum(val1) && val1 != "pi" && val1 != "e")
+            Error("Inserte un numero valido");
+    } while (!esNum(val1) && val1 != "pi" && val1 != "e");
+    a = str2dou(val1);
+    do {
+        std::cout << "Inserte el valor superior del intervalo a estimar: ";
+        std::cin >> val2;
+        if (str2dou(val1) >= str2dou(val2))
+            Error("El valor superior debe ser mayor al inferior");
+    } while (a >= str2dou(val2));
+    b = str2dou(val2);
+
+    // Obtener el nœmero de intervalos
+    do {
+        std::cout << "Inserte el numero de intervalos: ";
+        n = intChecker();
+        if (n <= 0)
+            Error("El nœmero de intervalos debe ser mayor que 0");
+    } while (n <= 0);
+    char auxStr;
+    do {
+        std::cout << "Ingrese lado del cual evaluar (derecha (d), izquierda (i), medio(m)): ";
+        std::cin >> auxStr;
+    } while (auxStr != 'd' && auxStr != 'i' && auxStr != 'm');
+    double punto;
+    double h = (b - a) / n;
+    for (int i = 0; i < n; i++)
+    {
+        punto = 0;
+        switch (auxStr)
+        {
+        case 'd':
+        {
+            punto = a + i * h;
+            break;
+        }
+        case 'i':
+        {
+            punto = h * (2 * i + 1) / 2 + a;
+            break;
+        }
+        case 'm':
+        {
+            punto = a + (i + 1) * h;
+            break;
+        }
+        default:
+            break;
+        }
+        resultado += evaluarPunto(integral, punto)*h;
+    }
+
+    std::cout << "La solucion es: " << resultado << std::endl;
+   
+    return;
 }
 
 int main(){
@@ -433,6 +521,7 @@ int main(){
                 trapecio(&integral);
                 break;
             case 4:
+                romberg(&integral);
                 break;
             case 5:
                 Simpson(&integral);
